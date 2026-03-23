@@ -10,16 +10,16 @@ data class HomeUiState(
     // Luces
     val isLivingRoomLightOn: Boolean = false,
     val isKitchenLightOn: Boolean = false,
-    
+
     // Aire Acondicionado (rango 16-30°C)
     val airConditionerTemp: Int = 22,
-    
+
     // Ventilador
     val isFanOn: Boolean = false,
-    
+
     // Puerta Principal
     val isMainDoorOpen: Boolean = false,
-    
+
     // Estados de carga por acción
     val isLivingRoomLightLoading: Boolean = false,
     val isKitchenLightLoading: Boolean = false,
@@ -27,4 +27,3 @@ data class HomeUiState(
     val isFanLoading: Boolean = false,
     val isMainDoorLoading: Boolean = false,
 )
-

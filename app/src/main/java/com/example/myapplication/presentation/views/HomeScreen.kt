@@ -1,8 +1,5 @@
-package com.example.myapplication.ui
+package com.example.myapplication.presentation.views
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,7 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.myapplication.model.HomeUiState
+import com.example.myapplication.presentation.viewModels.HomeViewModel
 
 /**
  * Pantalla principal de la casa inteligente.
@@ -59,11 +56,11 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
     // Suscribirse al estado - collectAsState convierte Flow a Compose State
     val state by viewModel.uiState.collectAsState()
     
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = {
+    Scaffold(// Scaffold es como un "layout base" que maneja top bars, bottom bars, FABs, etc.
+        modifier = Modifier.fillMaxSize(), // esto dice que el Scaffold ocupe toda la pantalla,
+        topBar = { // Aquí definimos la barra superior de la aplicación
+            TopAppBar(// TopAppBar es un componente predefinido para barras superiores
+                title = { // Aquí definimos el título de la barra
                     Text(
                         "🏠 Mi Casa Inteligente",
                         fontSize = 22.sp,
@@ -71,19 +68,20 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
                         color = Color.White
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
+                colors = TopAppBarDefaults.topAppBarColors( // Aquí definimos los colores de la barra
+                    containerColor = MaterialTheme.colorScheme.primary// El color de fondo de la barra es el color primario del tema
                 )
             )
         }
-    ) { innerPadding ->
+    ) { innerPadding -> // El Scaffold nos da un padding interno para evitar que el contenido quede debajo de la barra superior
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(innerPadding) // Aplicamos el padding que nos dio el Scaffold
+                .padding(horizontal = 16.dp), // Padding horizontal para que el contenido no toque los bordes de la pantalla
+            verticalArrangement = Arrangement.spacedBy(16.dp) // Espacio vertical entre los items de la lista
         ) {
+
             // ========== SALA ==========
             item {
                 RoomSection(
@@ -100,7 +98,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
                     )
                 }
             }
-            
+
             // ========== COCINA ==========
             item {
                 RoomSection(

@@ -1,4 +1,4 @@
-package com.example.myapplication.ui
+package com.example.myapplication.presentation.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,27 +25,27 @@ import kotlinx.coroutines.launch
  * - Cada capa tiene su responsabilidad claramente definida.
  */
 class HomeViewModel : ViewModel() {
-    
+
     // Inicializar el repositorio falso
     private val repository = FakeSmartHomeRepository()
-    
+
     // Estado privado (solo escritura dentro del ViewModel)
-    private val _uiState = MutableStateFlow(HomeUiState())
-    
+    private val _uiState = MutableStateFlow(HomeUiState()) // Estado inicial con valores por defecto
+
     // Estado público (solo lectura para la UI)
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
-    
+    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow() //
+
     // ========== LIVING ROOM LIGHT ==========
     fun toggleLivingRoomLight() {
-        viewModelScope.launch {
+        viewModelScope.launch { // Lanzar una corrutina para no bloquear el hilo principal
             // Activar estado de carga
             _uiState.value = _uiState.value.copy(isLivingRoomLightLoading = true)
-            
+
             try {
                 // Llamar al repositorio (este tiene los delays simulados)
-                val newState = !_uiState.value.isLivingRoomLightOn
+                val newState = !_uiState.value.isLivingRoomLightOn //  Invertir el estado actual
                 repository.toggleLivingRoomLight(newState)
-                
+
                 // Actualizar el estado con el nuevo valor
                 _uiState.value = _uiState.value.copy(
                     isLivingRoomLightOn = newState,
@@ -57,16 +57,16 @@ class HomeViewModel : ViewModel() {
             }
         }
     }
-    
+
     // ========== KITCHEN LIGHT ==========
     fun toggleKitchenLight() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isKitchenLightLoading = true)
-            
+
             try {
                 val newState = !_uiState.value.isKitchenLightOn
                 repository.toggleKitchenLight(newState)
-                
+
                 _uiState.value = _uiState.value.copy(
                     isKitchenLightOn = newState,
                     isKitchenLightLoading = false
@@ -76,18 +76,18 @@ class HomeViewModel : ViewModel() {
             }
         }
     }
-    
+
     // ========== AIR CONDITIONER ==========
     fun setAirConditionerTemp(temperature: Int) {
         // Limitar el rango 16-30
         val validTemp = temperature.coerceIn(16, 30)
-        
+
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isAirConditionerLoading = true)
-            
+
             try {
                 repository.setAirConditionerTemp(validTemp)
-                
+
                 _uiState.value = _uiState.value.copy(
                     airConditionerTemp = validTemp,
                     isAirConditionerLoading = false
@@ -97,16 +97,16 @@ class HomeViewModel : ViewModel() {
             }
         }
     }
-    
+
     // ========== FAN ==========
     fun toggleFan() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isFanLoading = true)
-            
+
             try {
                 val newState = !_uiState.value.isFanOn
                 repository.toggleFan(newState)
-                
+
                 _uiState.value = _uiState.value.copy(
                     isFanOn = newState,
                     isFanLoading = false
@@ -116,16 +116,16 @@ class HomeViewModel : ViewModel() {
             }
         }
     }
-    
+
     // ========== MAIN DOOR ==========
     fun toggleMainDoor() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isMainDoorLoading = true)
-            
+
             try {
                 val newState = !_uiState.value.isMainDoorOpen
                 repository.toggleMainDoor(newState)
-                
+
                 _uiState.value = _uiState.value.copy(
                     isMainDoorOpen = newState,
                     isMainDoorLoading = false
@@ -135,7 +135,7 @@ class HomeViewModel : ViewModel() {
             }
         }
     }
-    
+
     // ========== REFRESH ==========
     fun refreshHomeState() {
         viewModelScope.launch {
@@ -148,4 +148,3 @@ class HomeViewModel : ViewModel() {
         }
     }
 }
-
